@@ -14,6 +14,7 @@ public class MouseInputs implements
     public MouseInputs(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -46,6 +47,6 @@ public class MouseInputs implements
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        gamePanel.setRectPos(e.getX(), e.getY());
+
     }
 }
