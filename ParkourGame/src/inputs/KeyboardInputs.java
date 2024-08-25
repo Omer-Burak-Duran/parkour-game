@@ -12,6 +12,7 @@ public class KeyboardInputs implements KeyListener {
     public KeyboardInputs(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -19,7 +20,7 @@ public class KeyboardInputs implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 gamePanel.changeYPos(-5);
                 break;

@@ -3,32 +3,51 @@ package main;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GamePanel extends JPanel {
 
-    private Random random;
     private MouseInputs mouseInputs;
     private KeyboardInputs keyboardInputs;
-    private int frames = 0;
-    private long lastCheck = 0, now = 0;
-    private float xDir = 1f, yDir = 1f;
     private float xPos = 100, yPos = 100;
-    private int width = 200, height = 50;
-
-    private Color color = new Color(150,  20, 90);
+    private int panel_width = 1280, panel_height = 800;
+    private int obj_width = 64, obj_height = 40;
+    private float SCALE = 2.0f;
+    private BufferedImage bufImg, subImg;
 
     public GamePanel() {
-        random = new Random();
         mouseInputs = new MouseInputs(this);
         keyboardInputs = new KeyboardInputs(this);
+
+        importImg();
+
+        setPanelSize();
         addKeyListener(keyboardInputs);
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
     }
 
+    private void importImg() {
+        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
+
+        try {
+            bufImg = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setPanelSize() {
+        Dimension size = new Dimension(panel_width, panel_height);
+        setMinimumSize(size);
+        setMaximumSize(size);
+        setPreferredSize(size);
+    }
 
     public void changeXPos(int value) {
         this.xPos += value;
@@ -40,7 +59,7 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
-    public void setRectPos(int x, int y) {
+    public void setPos(int x, int y) {
         xPos = x;
         yPos = y;
         repaint();
@@ -49,30 +68,11 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        updateRectangle();
-        g.setColor(color);
-        g.fillRect((int) xPos,(int) yPos, width, height);
+        subImg = bufImg.getSubimage(1 * obj_width, 8 * obj_height, obj_width, obj_height);
 
+        g.drawImage(subImg, (int) xPos, (int) yPos, (int) (obj_width * SCALE),
+                (int) (obj_height * SCALE), null);
 
     }
 
-    private void updateRectangle() {
-        xPos += xDir;
-        if (xPos + width > 400 || xPos < 0) {
-            xDir *= -1;
-            color = getRandomColor();
-        }
-        yPos += yDir;
-        if (yPos + height > 400 || yPos < 0) {
-            yDir *= -1;
-            color = getRandomColor();
-        }
-    }
-
-    private Color getRandomColor() {
-        int r = random.nextInt(255);
-        int g = random.nextInt(255);
-        int b = random.nextInt(255);
-        return new Color(r,g,b);
-    }
 }

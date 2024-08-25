@@ -47,6 +47,6 @@ public class MouseInputs implements
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        gamePanel.setPos(e.getX(), e.getY());
     }
 }
